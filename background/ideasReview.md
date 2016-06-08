@@ -10,3 +10,11 @@
 3. Building closed loop feedback controller based on detecting fragility? Seems initial work was done by:
 Closed-loop control of a fragile network: application to seizure-like dynamics of an epilepsy model. D. Ehrens, D. Sritharan, S. Sarma. Frontiers in Neuroscience 2015. 
 
+Topics To Review:
+1) Computational Models Connecting Neuronal Activity to Electrophysiology
+2) Solving Linear Systems:
+	- System Identification
+	- Subspace Methods
+	- Kalman/EM Algs
+
+

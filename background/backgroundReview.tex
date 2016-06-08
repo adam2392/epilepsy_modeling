@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\title{Review of Computational Epilepsy Analysis}
+\author{Adam Li}
+
+\begin{document}
+\section{Review}
+
+1. Building a Full Brain Model
+
+2. Building a Forward Brain Model
+Here, we would be interested in computing the electric potential V(x) from a given primary current distribution D(x,t). With SEEG/ECoG data, use volume conduction model for the scalp surface. Approximately 85\% of all neurons are excitatory neurons with dendritic trees roughly perpendicular to cortical surface. Approximate the current dipoles using these neurons. Neglect dipole contributions from inhibitory neurons, since they are only present in 15\% of neurons and have spherical dendritic trees.
+
+Dipole strength is assumed roughly proportional to average membrane potential of excitatory population. This gives current distribution in three-dimensional physical brain. Then forward project to get V(x) to compare simulated ECoG with data.
+
+3. Testing on SEEG/ECoG Data
+
+\cite{Nunez1974}
+Basic Idea: In order to quantify the dynamcis of interactions between $10^{10}$ cortical neurons, we introduce the concept of a neural mass. The neural mass consists of sufficiently large number of neurons to exhibit average properties independent of inner circuitry within this subpopulation. Then we can use an integral wave equation to describe spatio-temoporal variations of the cortical voltage potential. This equation is like describing the excitatory and inhibitory action potential propagation.
+
+Background: Spontaneous and evoked potentials measured on the head are due to postsynaptic activity on vertically oriented neurons in the cortex (perpendicular). Here they \textbf{assume} that the cortex exhibits homogeneity, such that the vertical distribution of columnar cortext synaptic activity averaged over a volume element dV, is the same in all parts of the cortex. 
+
+
+\cite{Ritter2013}
+Basic Idea:
+The Virtual Brain (TVB), allows modeling based simulation, analysis and inference of neurophysiological mechanisms over several brain scales underlying the generation of macrsocopic neurlogical signals such as electroencephalography (EEG). TVB allows one to build a large-scale neural network model incorporating brain physiology and combined with a forward model to simulate neuroimaging modalities (e.g. fMRI, EEG).
+
+Background: Observations of signals emitted by neurons and neuronal populations is a common approach to analyzing brain function. The physiological behavior at microscopic (synaptic and neuron) levels are important for understanding neuronal computation, while the whole-brain scale and brain network activity are important for understanding integration and cognition. These macroscopic signal features emerge from the interaction of neuronal popuations at local and global scales and the link to function still remains unclear. \textbf{How are biophysical activities, neuronal population activity and brain function related?} 
+
+This allows an iterative approach between observed neuroimaging data and parameter settings of the model, to connect physiological parameters with functional activity. This could uncover underlying variability in fMRI/EEG across subjects due to their brain structure. The TVB takes a full-brain model to a forward model to compute EEG/MEG signals.
+
+They mainly use the Stefanescu-Jirsa model for simulation of local dynamics at 96 cortical regions, which are connected to form a network. Using existing fMRI data to form tractography data, then they formed a feed-forward model to estimate EEG and fMRI.
+
+Suggests a three-step procedure for parameter estimation of the complex model with 10 parameters per node and 96 brain regions. 
+
+1. Dimensionality Reduction
+The goal is to estimate the intrinsic dimensionality of the data. Assuming, the observed data lies in a subspace and the dimensionality of the manifold correspond to the intrinsic dimensionality of the data. Many ways to do this such as PCA and cutting off a certain threshold of explained variance.
+
+2. Manifold Learning
+The goal is to find a transformation of data into a new coordinate system on a manifold. 
+
+There are many different techniques:
+- multidimensional scaling (MDS)
+- Stochastic Proximity Embedding
+- Maximum variance unfolding 
+- Diffusion maps
+
+3. Parameter Estimation
+The goal is to find the parameters of the system at each time point. The algorithm can check each estimate against a series of constraints on the data. For example, use fMRI data to verify ECoG estimates.
+
+
+
+% references
+\newpage
+\small
+{
+  \bibliography{/Users/adam2392/Documents/Bibtex/Epilepsy.bib}
+  \bibliographystyle{plain}
+}
+\end{document}
