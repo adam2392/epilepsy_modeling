@@ -20,12 +20,57 @@ Dipole strength is assumed roughly proportional to average membrane potential of
 
 3. Testing on SEEG/ECoG Data
 
+Here, I review some seminal papers in computational neuroscience, as well as papers related to forward model of EEG using neuronal network dynamics. 
+
+\subsection{Excitatory and Inhibitory Interactions in Localized Populations of Model Neurons}
+\cite{Wilson1972}
+
+Here, I write down the main ideas implemented by this foundational paper. The main idea is that we can model population of neurons' activity instead of singular neurons based on local redundancy of brain activity in many tasks.
+
+Summary of Main Steps:
+1. They made assumptions of the neural population of cells based on existing neurobiology, such as:
+- all nervous processes of any complexity are dependent upon interaction between excitatory and inhibitory cells
+- cells in populations are in close proximity and interconnections are random and dense
+- there exists at least 1 path between any two cells in a population
+
+2. Define variables of interest, such as:
+- E(t), I(t)  = the proportion of excitatory/inhibitory cells firing per unit time at t
+- r = absolute refractory period
+- Se(x), Si(x) = proportion of excitatory/inhibitory cells responding to an excitation level x
+
+3. Define equations for:
+- proportion of excitatory/inhibitory cells refractory during a time period
+- Se(x), Si(x) = response functions derived from distribution of either synapse thresholds, or afferent inputs per cell
+- average level of excitation in a cell of a population
+
+4. Get rid of correlation between excitation proportion and sensitivity proportion
+
+5. Derive nonlinear eqn. for E(t)
+
+\[E(t+\gamma) = [1 - \int{t-r}{t}E(t')dt'] * S_e{\int{-\inf}{t}\alpha{(t-t')} [c_1 E(t') - c_2 I(t') + P(t')]dt'}\]
+
+\[
+I(t+\gamma) = [1 - \int{t-r}{t}I(t')dt'] * S_i{\int{-\inf}{t}\alpha{(t-t')} [c_3 E(t') - c_4 I(t') + P(t')]dt'}
+\]
+
+6. Apply time-course graining to all temporal integrals with dt
+
+7. Apply linearization via Taylor series expansion of E(t+$\gamma$) with $\gamma{}=0$
+
+8. Study system by varying:
+	- c1, c2, c3, c4
+	- ae, ai
+	- $\theta_i, \theta_e$
+	- re, ri
+	- P, Q
+
+\subsection{The Brain Wave Equation: A Model for the EEG}
 \cite{Nunez1974}
 Basic Idea: In order to quantify the dynamcis of interactions between $10^{10}$ cortical neurons, we introduce the concept of a neural mass. The neural mass consists of sufficiently large number of neurons to exhibit average properties independent of inner circuitry within this subpopulation. Then we can use an integral wave equation to describe spatio-temoporal variations of the cortical voltage potential. This equation is like describing the excitatory and inhibitory action potential propagation.
 
 Background: Spontaneous and evoked potentials measured on the head are due to postsynaptic activity on vertically oriented neurons in the cortex (perpendicular). Here they \textbf{assume} that the cortex exhibits homogeneity, such that the vertical distribution of columnar cortext synaptic activity averaged over a volume element dV, is the same in all parts of the cortex. 
 
-
+\subsection{Spatiotemporal forward solution of the EEG and MEG using network modeling.}
 \cite{Ritter2013}
 Basic Idea:
 The Virtual Brain (TVB), allows modeling based simulation, analysis and inference of neurophysiological mechanisms over several brain scales underlying the generation of macrsocopic neurlogical signals such as electroencephalography (EEG). TVB allows one to build a large-scale neural network model incorporating brain physiology and combined with a forward model to simulate neuroimaging modalities (e.g. fMRI, EEG).
@@ -52,6 +97,42 @@ There are many different techniques:
 
 3. Parameter Estimation
 The goal is to find the parameters of the system at each time point. The algorithm can check each estimate against a series of constraints on the data. For example, use fMRI data to verify ECoG estimates.
+
+\subsection{Spatiotemporal Forward Solution of the EEG and MEG Using Network Modeling}
+\cite{Jirsa2002}
+
+Here, connect level of neuronal network dynamics to EEG/MEG patterns. First they map the neural field dyanamics from sphere onto a folded cortical surface. Then solving a boundary condition problem, can solve for the EEG temporal dynamics at each point on the sphere. In this paper they examined finger movements as their macroscopic behavior.
+
+1. Model Neural Field Dynamics: 
+
+Here they modeled the local field potentials (LFPs) in extracellular space of the cortical sheet. Included firing rates, LFPs, and connectivity variations. They write the neural field dynamics as:
+
+\[
+\psi{(x, t)} = \int_{\Gamma}dX f(x, X) * S[\psi{(X, t - \frac{|x - X|}{v})} + p(X, t - \frac{|x-X|}{v})]
+\]
+where:
+- S[.] represents sigmoidal firing rate
+- v is the propagation velocity along axonal fibers
+- f(x,X) is connectivity  = \[1/2\sigma{} * e^{-|x-X|/\sigma{}}\]
+
+2. Define Neural Field Dynamics on a Sphere:
+
+Here they wanted a simple representation of neural field dyanamics on a closed 2-D surface. The spherical geometry is a good coordinate system because it has a simple parametrization, can decompose spatial patterns into spherical harmonics, and reduce computation time for numerical algorithms.
+
+They define a spherical boundary condition partial differential equation with a homogenous, exponentially decaying connectivity function.
+
+The PDE to be determined is:
+
+\[(\frac{\partial^2}{\partial t^2} + 2w\frac{\partial}{\partial t} + w_0^2 - v^2\Delta)^{3/2} \psi{}(x,t) = (w_0^3 + w_0^2 \frac{\partial}{\partial t}) * S[\psi{(x,t)} + p(x,t)] \]
+
+3. Forward Solution of the EEG:
+
+With the current distribution on 3-D space and evolution over time t, we can use a forward model to compute the scalar electric potential V(x) on the skull surface.
+
+The forward EEG solution is given by the following boundary problem. 
+
+\[ \Delta * (\sigma{(x)}\Delta V(x)) = \Delta * (\psi{(x,t)}n(x))
+\]
 
 
 
